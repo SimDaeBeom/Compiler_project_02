@@ -11,7 +11,8 @@ public class C0_parser {
 	public List<String> raw_format_list;
 	public List<Production_rule> rule_list;
 	public List<Dot_rule> all_possible_dot_list;
-	public List<List<Dot_rule>> c0_i_list;
+	public Dot_rule Augmented_rules;
+	public List<Iterator_c0> c0_i_list;
 	public int rule_cnt;
 	
 	public C0_parser(String filePath) 
@@ -20,7 +21,7 @@ public class C0_parser {
 		this.rule_list = new ArrayList<Production_rule>();
 		this.all_possible_dot_list = new ArrayList<Dot_rule>();
 		
-		this.c0_i_list = new ArrayList<List<Dot_rule>>();
+		this.c0_i_list = new ArrayList<Iterator_c0>();
 		
 		file_reader(filePath);
 		format_distribute();
@@ -64,28 +65,57 @@ public class C0_parser {
 		}
 	}
 	
-	public void c0_compute() 
-	{
+	public void c0_compute() {
 		boolean changed = true;
-		this.c0_i_list.add(get_closure(this.all_possible_dot_list.get(0)));
-		this.c0_i_list.add(get_goto('T', get_closure(this.all_possible_dot_list.get(0))));
-		this.print_string_in_dot_list(this.c0_i_list.get(1));
+
+		this.c0_i_list.add(new Iterator_c0(get_closure(this.all_possible_dot_list.get(0))));
+		// this.c0_i_list.add(get_goto('E',
+		// get_closure(this.all_possible_dot_list.get(0))));
+
+		// this.print_string_in_dot_list(this.c0_i_list.get(0));
+		// this.print_string_in_dot_list(this.c0_i_list.get(1));
+		this.print_string_in_dot_list(this.c0_i_list.get(0).dot_rule_list);
+
+		//this.c0_i_list.add(new Iterator_c0(get_goto('T', this.c0_i_list.get(0).dot_rule_list)));
+
+		//this.print_string_in_dot_list(this.c0_i_list.get(1).dot_rule_list);
+
+		//System.out.println(this.is_contain(this.c0_i_list, get_goto('T', this.c0_i_list.get(0).dot_rule_list)));
+
+		// System.out.println("");
+		//
+		// this.c0_i_list.add(get_goto('+', this.c0_i_list.get(1)));
+		// this.print_string_in_dot_list(this.c0_i_list.get(2));
+
+		List<Character> char_list;
+		List<Dot_rule> temp;
+		List<Dot_rule> cur_dot_list;
+
+		// for(int i = 0; i < this.c0_i_list.size(); i++)
+		for (int i = 0; i < 30; i++) 
+		{
+			cur_dot_list = this.c0_i_list.get(i).dot_rule_list;
+			char_list = this.get_char_next_dot_list(this.c0_i_list.get(i).dot_rule_list);
+			
+			System.out.println("---Compute goto I" + i + "  with" + char_list);
+			this.print_string_in_dot_list(cur_dot_list);
 		
-//		while(changed) 
-//		{
-//			changed = false;
-//			for(List<Dot_rule> dot_rule_list : this.c0_i_list)
-//			{
-//				this.print_string_in_dot_list(dot_rule_list);
-//				System.out.println("GOTO");
-//				for(int i = 0; i < this.get_char_next_dot_list(dot_rule_list).size(); i++) 
-//				{
-//					System.out.println(this.get_char_next_dot_list(dot_rule_list).get(i));
-//					if(!this.c0_i_list.contains(this.get_goto(this.get_char_next_dot_list(dot_rule_list).get(i), dot_rule_list)))
-//						this.c0_i_list.add(this.get_goto(this.get_char_next_dot_list(dot_rule_list).get(i), dot_rule_list));
-//				}
-//			}
-//		}
+			for (int j = 0; j < char_list.size(); j++) 
+			{
+				temp = this.get_goto(char_list.get(j), cur_dot_list);
+				if (!this.is_contain(this.c0_i_list, temp))
+				{
+
+					System.out.println("GOTO (" + i + "," + this.get_char_next_dot_list(cur_dot_list).get(j) + ") = I " + (Iterator_c0.iterator_cnt));
+
+					this.c0_i_list.add(new Iterator_c0(temp));
+
+					this.print_string_in_dot_list(temp);
+				}
+				else;
+			}
+		}
+		System.out.println(Iterator_c0.iterator_cnt);
 	}
 	
 	public List<Dot_rule> get_closure(Dot_rule rule)
@@ -126,9 +156,9 @@ public class C0_parser {
 		{
 			if(elem.get_char_next_dot() == symbol) 
 			{
-				elem.dot_move_right();
-				list = union(list, get_closure(elem));
-				//list.addAll(get_closure(elem));
+				Dot_rule temp = new Dot_rule(elem.start, elem.rule.toString(), elem.dot_index);
+				temp.dot_move_right();
+				list = union(list, get_closure(temp));
 			}
 		}
 		return list;
@@ -166,5 +196,15 @@ public class C0_parser {
 		}
 		
 		return char_list;
+	}
+	
+	public boolean is_contain(List<Iterator_c0> c0_list, List<Dot_rule> dot_rule) 
+	{
+		for(Iterator_c0 elem : c0_list) 
+		{
+			if(elem.is_same(dot_rule))
+				return true;
+		}
+		return false;
 	}
 }
