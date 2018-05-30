@@ -1,7 +1,10 @@
 package c0_computation;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,27 @@ public class C0_parser {
 		format_distribute();
 		compute_all_possible_dot_list();
 		c0_compute();
+	}
+	
+	public void	write_to_file() throws IOException 
+	{
+		File save_file = new File("output.txt");
+		
+		int cnt = 0;
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(save_file));
+		
+		for (Iterator_c0 iterator : this.c0_i_list) {
+			bw.write("I" + Integer.toString(cnt));
+			bw.newLine();
+			cnt++;
+			for(Dot_rule elem : iterator.dot_rule_list) 
+			{
+				bw.write("[" + elem.start + "->" + elem.get_dot_string() + "]");
+			}
+			bw.newLine();
+		}
+		bw.close();
 	}
 	
 	public void file_reader(String filePath)
@@ -55,6 +79,7 @@ public class C0_parser {
 		}
 		rule_list.add(0, new Production_rule("S>" + rule_list.get(0).start));
 		this.rule_cnt++;
+		
 	}
 	
 	public void compute_all_possible_dot_list() 
@@ -69,29 +94,11 @@ public class C0_parser {
 		boolean changed = true;
 
 		this.c0_i_list.add(new Iterator_c0(get_closure(this.all_possible_dot_list.get(0))));
-		// this.c0_i_list.add(get_goto('E',
-		// get_closure(this.all_possible_dot_list.get(0))));
-
-		// this.print_string_in_dot_list(this.c0_i_list.get(0));
-		// this.print_string_in_dot_list(this.c0_i_list.get(1));
-		//this.print_string_in_dot_list(this.c0_i_list.get(0).dot_rule_list);
-
-		//this.c0_i_list.add(new Iterator_c0(get_goto('T', this.c0_i_list.get(0).dot_rule_list)));
-
-		//this.print_string_in_dot_list(this.c0_i_list.get(1).dot_rule_list);
-
-		//System.out.println(this.is_contain(this.c0_i_list, get_goto('T', this.c0_i_list.get(0).dot_rule_list)));
-
-		// System.out.println("");
-		//
-		// this.c0_i_list.add(get_goto('+', this.c0_i_list.get(1)));
-		// this.print_string_in_dot_list(this.c0_i_list.get(2));
 
 		List<Character> char_list;
 		Iterator_c0 temp;
 		List<Dot_rule> cur_dot_list;
 
-		//for(int i = 0; i < this.c0_i_list.size(); i++)
 		for (int i = 0; i < this.c0_i_list.size(); i++) 
 		{
 			cur_dot_list = this.c0_i_list.get(i).dot_rule_list;
