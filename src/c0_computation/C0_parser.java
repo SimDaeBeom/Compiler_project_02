@@ -91,7 +91,6 @@ public class C0_parser {
 	}
 	
 	public void c0_compute() {
-		boolean changed = true;
 
 		this.c0_i_list.add(new Iterator_c0(get_closure(this.all_possible_dot_list.get(0))));
 
@@ -110,13 +109,15 @@ public class C0_parser {
 			for (int j = 0; j < char_list.size(); j++) 
 			{
 				temp = new Iterator_c0(this.get_goto(char_list.get(j), cur_dot_list));
+				System.out.println("");
+				this.print_string_in_dot_list(temp.dot_rule_list);
 				if (!is_exist(temp))
 				{
 					System.out.println("GOTO (" + i + "," + this.get_char_next_dot_list(cur_dot_list).get(j) + ") = I " + this.c0_i_list.size());
 
 					this.c0_i_list.add(temp);
 
-					this.print_string_in_dot_list(this.c0_i_list.get(this.c0_i_list.size() - 1).dot_rule_list);
+					//this.print_string_in_dot_list(this.c0_i_list.get(this.c0_i_list.size() - 1).dot_rule_list);
 				}
 			}
 		}

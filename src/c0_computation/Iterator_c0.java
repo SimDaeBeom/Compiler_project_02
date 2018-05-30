@@ -23,6 +23,8 @@ public class Iterator_c0 {
 	
 	public boolean is_equal(Iterator_c0 operand) 
 	{		
+		if(operand.dot_rule_list.size() != this.dot_rule_list.size())
+			return false;
 		for(Dot_rule elem : operand.dot_rule_list) 
 		{
 			if(!this.is_contain(elem))
