@@ -48,4 +48,15 @@ public class Dot_rule{
 	{
 		System.out.println(this.start + ">" + this.get_dot_string());
 	}
+	
+	public boolean is_equal(Dot_rule operand) 
+	{
+		int strComp = operand.rule.toString().compareTo(operand.rule.toString()); 
+		if(this.dot_index == operand.dot_index && 
+				this.start == operand.start &&
+				strComp == 0
+				) 			
+			return true;
+		return false;
+	}	
 }

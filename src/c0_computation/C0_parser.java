@@ -74,7 +74,7 @@ public class C0_parser {
 
 		// this.print_string_in_dot_list(this.c0_i_list.get(0));
 		// this.print_string_in_dot_list(this.c0_i_list.get(1));
-		this.print_string_in_dot_list(this.c0_i_list.get(0).dot_rule_list);
+		//this.print_string_in_dot_list(this.c0_i_list.get(0).dot_rule_list);
 
 		//this.c0_i_list.add(new Iterator_c0(get_goto('T', this.c0_i_list.get(0).dot_rule_list)));
 
@@ -88,11 +88,11 @@ public class C0_parser {
 		// this.print_string_in_dot_list(this.c0_i_list.get(2));
 
 		List<Character> char_list;
-		List<Dot_rule> temp;
+		Iterator_c0 temp;
 		List<Dot_rule> cur_dot_list;
 
-		// for(int i = 0; i < this.c0_i_list.size(); i++)
-		for (int i = 0; i < 30; i++) 
+		//for(int i = 0; i < this.c0_i_list.size(); i++)
+		for (int i = 0; i < this.c0_i_list.size(); i++) 
 		{
 			cur_dot_list = this.c0_i_list.get(i).dot_rule_list;
 			char_list = this.get_char_next_dot_list(this.c0_i_list.get(i).dot_rule_list);
@@ -102,20 +102,18 @@ public class C0_parser {
 		
 			for (int j = 0; j < char_list.size(); j++) 
 			{
-				temp = this.get_goto(char_list.get(j), cur_dot_list);
-				if (!this.is_contain(this.c0_i_list, temp))
+				temp = new Iterator_c0(this.get_goto(char_list.get(j), cur_dot_list));
+				if (!is_exist(temp))
 				{
+					System.out.println("GOTO (" + i + "," + this.get_char_next_dot_list(cur_dot_list).get(j) + ") = I " + this.c0_i_list.size());
 
-					System.out.println("GOTO (" + i + "," + this.get_char_next_dot_list(cur_dot_list).get(j) + ") = I " + (Iterator_c0.iterator_cnt));
+					this.c0_i_list.add(temp);
 
-					this.c0_i_list.add(new Iterator_c0(temp));
-
-					this.print_string_in_dot_list(temp);
+					this.print_string_in_dot_list(this.c0_i_list.get(this.c0_i_list.size() - 1).dot_rule_list);
 				}
-				else;
 			}
 		}
-		System.out.println(Iterator_c0.iterator_cnt);
+		System.out.println(this.c0_i_list.size());
 	}
 	
 	public List<Dot_rule> get_closure(Dot_rule rule)
@@ -198,13 +196,13 @@ public class C0_parser {
 		return char_list;
 	}
 	
-	public boolean is_contain(List<Iterator_c0> c0_list, List<Dot_rule> dot_rule) 
+	public boolean is_exist(Iterator_c0 operand) 
 	{
-		for(Iterator_c0 elem : c0_list) 
+		for(Iterator_c0 elem : this.c0_i_list) 
 		{
-			if(elem.is_same(dot_rule))
+			if(elem.is_equal(operand))
 				return true;
 		}
-		return false;
+		return false;	
 	}
 }
