@@ -23,7 +23,6 @@ public class C0_parser {
 		this.raw_format_list = new ArrayList<String>();
 		this.rule_list = new ArrayList<Production_rule>();
 		this.all_possible_dot_list = new ArrayList<Dot_rule>();
-		
 		this.c0_i_list = new ArrayList<Iterator_c0>();
 		
 		file_reader(filePath);
