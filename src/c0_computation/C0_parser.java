@@ -263,6 +263,7 @@ public class C0_parser {
 	
 	/*
 	 * Print method for show process.
+	 * NO Description in report.
 	 */
 	public void print_string_in_dot_list(List<Dot_rule> list) 
 	{
